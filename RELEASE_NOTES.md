@@ -1,12 +1,10 @@
-# 🎲 LoL Build Randomizer - Release v0.0.4
+# 🎲 LoL Build Randomizer - Release v0.0.5
 
-Welcome to the new v0.0.4 update! 🚀
-We are refining the project to ensure a true cross-platform experience with structural improvements to the native executables.
+Welcome to the newly polished v0.0.5 update! 🚀
+This is a quick hotfix and optimization patch following our recent multi-platform refactoring.
 
 ## ✨ New Features
-- **Official Native Support:** Restored support for native icon metadata in the Electrobun engine. Now all compilers and systems (Win, Mac, Linux) will use the framework's official injection to handle window properties.
-- **MacOS Iconset:** The project now supports `.iconset` and builds system tray/app icons seamlessly right out of the box!
+- **Node.js 24 Support via GH Actions:** Future-proofed the CI/CD pipeline! Outdated internal engine warnings (`Node.js 20 actions are deprecated`) have been completely suppressed and resolved by migrating the infrastructure to Node 24 natively.
 
 ## 🐛 Bug Fixes
-- Fixed a bug where `RELEASE_NOTES.md` was ignored on the repository's release tab (the GitHub Actions Runner was skipping checkout for documentation files).
-- Removed secondary `rcedit` hard-coded scripts from the deployment pipeline to prioritize the native CLI.
+- Fixed an issue where the Windows `.ico` injection path was targeting an incorrect directory. The native framework bundler now correctly targets `assets/icon.ico` upon compilation.

@@ -23,7 +23,7 @@ const config: ElectrobunConfig = {
       icon: "icon.iconset/icon_256x256.png"
     },
     win: {
-      icon: "icon.ico"
+      icon: "assets/icon.ico"
     }
   },
 };
