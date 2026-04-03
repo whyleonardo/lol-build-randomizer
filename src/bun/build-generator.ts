@@ -7,8 +7,8 @@ import type {
   RuneTree,
   SelectedRunes,
   SummonerSpell,
-} from "../shared/types";
-import { STAT_SHARDS } from "../shared/types";
+} from "../shared/types.ts";
+import { STAT_SHARDS } from "../shared/types.ts";
 import {
   getChampions,
   getItems,
