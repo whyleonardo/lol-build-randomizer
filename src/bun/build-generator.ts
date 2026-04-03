@@ -90,7 +90,8 @@ function getBootItems(allItems: Map<string, Item>): Item[] {
 // ============================================
 
 function randomElement<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
+  if (arr.length === 0) throw new Error("Cannot pick from empty array");
+  return arr[Math.floor(Math.random() * arr.length)]!;
 }
 
 function randomElements<T>(arr: T[], count: number): T[] {
@@ -159,14 +160,41 @@ function pickChampion(
   return randomElement(filtered.length > 0 ? filtered : allChampions);
 }
 
+const CLASS_ITEM_TAGS: Record<string, string[]> = {
+  Fighter: ["Damage", "Health", "Armor", "SpellBlock", "LifeSteal", "AttackSpeed", "CooldownReduction"],
+  Tank: ["Health", "Armor", "SpellBlock", "HealthRegen"],
+  Mage: ["SpellDamage", "Mana", "CooldownReduction", "MagicPenetration"],
+  Assassin: ["Damage", "ArmorPenetration", "CooldownReduction", "SpellDamage", "Lethality"],
+  Marksman: ["Damage", "AttackSpeed", "CriticalStrike", "LifeSteal", "ArmorPenetration"],
+  Support: ["HealthRegen", "ManaRegen", "CooldownReduction", "Aura", "Active", "SpellDamage", "Health"]
+};
+
 function pickItems(
   itemsMap: Map<string, Item>,
-  _champion: Champion,
+  champion: Champion,
   ultimateBravery: boolean
 ): Item[] {
-  const validItems: Item[] = [];
+  let validItems: Item[] = [];
+  
+  // Aggregate preferred tags based on champion class
+  const preferredItemTags = new Set<string>();
+  if (!ultimateBravery) {
+    for (const champTag of champion.tags) {
+      const tags = CLASS_ITEM_TAGS[champTag] || [];
+      tags.forEach(t => preferredItemTags.add(t));
+    }
+  }
+
   for (const [, item] of itemsMap) {
     if (isValidItem(item, ultimateBravery)) {
+      // In normal mode, only allow items that match the champion's preferred tags
+      // (or if we don't have any preferred tags, allow all)
+      if (!ultimateBravery && preferredItemTags.size > 0 && !item.tags.includes("Boots")) {
+        const itemHasPreferredTag = item.tags.some(t => preferredItemTags.has(t));
+        if (!itemHasPreferredTag) {
+          continue;
+        }
+      }
       validItems.push(item);
     }
   }
@@ -196,17 +224,17 @@ function pickRunes(
   const subTree = randomElement(otherTrees);
 
   // Primary: keystone (slot 0) + one from each of slots 1, 2, 3
-  const keystone = randomElement(primaryTree.slots[0].runes);
+  const keystone = randomElement(primaryTree.slots[0]!.runes);
   const primarySelections: RuneData[] = [];
   for (let i = 1; i < primaryTree.slots.length && i <= 3; i++) {
-    primarySelections.push(randomElement(primaryTree.slots[i].runes));
+    primarySelections.push(randomElement(primaryTree.slots[i]!.runes));
   }
 
   // Secondary: pick 2 from 2 different rows of the sub tree (slots 1, 2, 3)
   const subSlotIndices = [1, 2, 3].filter((i) => i < subTree.slots.length);
   const selectedSubSlots = randomElements(subSlotIndices, 2);
   const subSelections: RuneData[] = selectedSubSlots.map((slotIdx) =>
-    randomElement(subTree.slots[slotIdx].runes)
+    randomElement(subTree.slots[slotIdx]!.runes)
   );
 
   // Stat shards

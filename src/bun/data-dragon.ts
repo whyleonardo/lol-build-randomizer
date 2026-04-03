@@ -18,7 +18,7 @@ export async function getLatestVersion(): Promise<string> {
 
   const response = await fetch(`${DDRAGON_BASE}/api/versions.json`);
   const versions: string[] = await response.json();
-  cachedVersion = versions[0];
+  cachedVersion = versions[0] ?? "14.1.1";
   console.log(`[DataDragon] Latest version: ${cachedVersion}`);
   return cachedVersion;
 }
@@ -30,7 +30,7 @@ export async function getChampions(): Promise<Map<string, Champion>> {
   const url = `${DDRAGON_BASE}/cdn/${version}/data/en_US/champion.json`;
   console.log(`[DataDragon] Fetching champions...`);
   const response = await fetch(url);
-  const data = await response.json();
+  const data: any = await response.json();
 
   cachedChampions = new Map();
   for (const [key, value] of Object.entries(data.data)) {
@@ -56,7 +56,7 @@ export async function getItems(): Promise<Map<string, Item>> {
   const url = `${DDRAGON_BASE}/cdn/${version}/data/en_US/item.json`;
   console.log(`[DataDragon] Fetching items...`);
   const response = await fetch(url);
-  const data = await response.json();
+  const data: any = await response.json();
 
   cachedItems = new Map();
   for (const [id, value] of Object.entries(data.data)) {
@@ -86,7 +86,7 @@ export async function getRunes(): Promise<RuneTree[]> {
   const url = `${DDRAGON_BASE}/cdn/${version}/data/en_US/runesReforged.json`;
   console.log(`[DataDragon] Fetching runes...`);
   const response = await fetch(url);
-  cachedRunes = await response.json();
+  cachedRunes = (await response.json()) as RuneTree[];
 
   console.log(`[DataDragon] Loaded ${cachedRunes!.length} rune trees`);
   return cachedRunes!;
@@ -101,7 +101,7 @@ export async function getSummonerSpells(): Promise<
   const url = `${DDRAGON_BASE}/cdn/${version}/data/en_US/summoner.json`;
   console.log(`[DataDragon] Fetching summoner spells...`);
   const response = await fetch(url);
-  const data = await response.json();
+  const data: any = await response.json();
 
   cachedSummonerSpells = new Map();
   for (const [key, value] of Object.entries(data.data)) {
