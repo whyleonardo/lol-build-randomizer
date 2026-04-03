@@ -1,0 +1,1072 @@
+/* ============================================
+   LoL Build Randomizer — Premium Dark Theme
+   Inspired by the League of Legends client
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+/* ============================================
+   CSS Variables
+   ============================================ */
+:root {
+  /* LoL-inspired color palette */
+  --bg-primary: #010A13;
+  --bg-secondary: #0A1428;
+  --bg-tertiary: #0A1628;
+  --bg-card: rgba(10, 20, 40, 0.85);
+  --bg-card-hover: rgba(15, 30, 55, 0.95);
+
+  /* Gold accents */
+  --gold-primary: #C89B3C;
+  --gold-light: #F0E6D2;
+  --gold-dark: #785A28;
+  --gold-glow: rgba(200, 155, 60, 0.4);
+
+  /* Cyan/Teal accents */
+  --cyan-primary: #0AC8B9;
+  --cyan-light: #0FE0CF;
+  --cyan-dark: #008B7E;
+  --cyan-glow: rgba(10, 200, 185, 0.3);
+
+  /* Status colors */
+  --success: #1EA85F;
+  --error: #E84057;
+  --warning: #F0A030;
+  --info: #0AC8B9;
+
+  /* Text */
+  --text-primary: #F0E6D2;
+  --text-secondary: #A09B8C;
+  --text-muted: #5B5A56;
+
+  /* Borders */
+  --border-gold: rgba(200, 155, 60, 0.3);
+  --border-subtle: rgba(240, 230, 210, 0.08);
+
+  /* Spacing */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Shadows */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-glow-gold: 0 0 20px rgba(200, 155, 60, 0.2);
+  --shadow-glow-cyan: 0 0 20px rgba(10, 200, 185, 0.2);
+}
+
+/* ============================================
+   Base Reset & Typography
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   Scrollbar
+   ============================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gold-dark);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-primary);
+}
+
+/* ============================================
+   Layout
+   ============================================ */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 30%, var(--bg-tertiary) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background decorative elements */
+#app::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(200, 155, 60, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#app::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  left: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(10, 200, 185, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================
+   Header / Title Bar
+   ============================================ */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: rgba(1, 10, 19, 0.9);
+  border-bottom: 1px solid var(--border-gold);
+  -webkit-app-region: drag;
+  position: relative;
+  z-index: 10;
+  min-height: 48px;
+  backdrop-filter: blur(12px);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  -webkit-app-region: no-drag;
+}
+
+.app-logo {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.app-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gold-primary);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  -webkit-app-region: no-drag;
+}
+
+.patch-badge {
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: rgba(200, 155, 60, 0.1);
+  border: 1px solid var(--border-gold);
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+
+.lcu-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.lcu-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--error);
+  transition: background 0.3s ease;
+}
+
+.lcu-dot.connected {
+  background: var(--success);
+  box-shadow: 0 0 8px rgba(30, 168, 95, 0.5);
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ============================================
+   Controls Bar
+   ============================================ */
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: rgba(10, 20, 40, 0.5);
+  border-bottom: 1px solid var(--border-subtle);
+  position: relative;
+  z-index: 10;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.controls-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.controls-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Role Selector */
+.role-selector {
+  display: flex;
+  gap: 2px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-md);
+  padding: 2px;
+  border: 1px solid var(--border-subtle);
+}
+
+.role-btn {
+  padding: 6px 14px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.role-btn:hover {
+  color: var(--text-primary);
+  background: rgba(200, 155, 60, 0.1);
+}
+
+.role-btn.active {
+  color: var(--bg-primary);
+  background: var(--gold-primary);
+  font-weight: 600;
+}
+
+/* Toggle Switches */
+.toggle-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggle-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.toggle-switch.active {
+  background: var(--cyan-primary);
+  border-color: var(--cyan-primary);
+}
+
+.toggle-switch.active::after {
+  left: 18px;
+  background: white;
+}
+
+.toggle-switch.ub-active {
+  background: var(--error);
+  border-color: var(--error);
+}
+
+/* ============================================
+   Main Content
+   ============================================ */
+.main-content {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  grid-template-rows: 1fr auto;
+  gap: 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================
+   Champion Panel (Left)
+   ============================================ */
+.champion-panel {
+  grid-row: 1 / 3;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border-gold);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.champion-splash {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.champion-splash img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.champion-splash::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(transparent, var(--bg-card));
+  pointer-events: none;
+}
+
+.champion-info {
+  padding: 16px 20px;
+  position: relative;
+  z-index: 2;
+  margin-top: -40px;
+}
+
+.champion-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--gold-light);
+  line-height: 1.1;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.champion-title {
+  font-size: 13px;
+  color: var(--gold-primary);
+  font-weight: 400;
+  font-style: italic;
+  margin-top: 4px;
+  text-transform: capitalize;
+}
+
+.champion-tags {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.champion-tag {
+  font-size: 10px;
+  color: var(--text-secondary);
+  background: rgba(200, 155, 60, 0.1);
+  border: 1px solid var(--border-gold);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.lock-champion-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid var(--border-gold);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lock-champion-btn:hover {
+  background: rgba(200, 155, 60, 0.1);
+  color: var(--gold-primary);
+  border-color: var(--gold-primary);
+}
+
+.lock-champion-btn.locked {
+  background: rgba(200, 155, 60, 0.2);
+  color: var(--gold-primary);
+  border-color: var(--gold-primary);
+}
+
+/* Summoner Spells in champion panel */
+.summoner-spells-section {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: auto;
+}
+
+.section-title {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.summoner-spells {
+  display: flex;
+  gap: 10px;
+}
+
+.spell-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--gold-dark);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: default;
+  position: relative;
+}
+
+.spell-icon:hover {
+  border-color: var(--gold-primary);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-glow-gold);
+}
+
+.spell-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.spell-name {
+  font-size: 10px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* ============================================
+   Build Panel (Right)
+   ============================================ */
+.build-panel {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 20px;
+  gap: 20px;
+}
+
+/* Runes Section */
+.runes-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.rune-tree-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+.rune-tree-card:hover {
+  border-color: var(--border-gold);
+  box-shadow: var(--shadow-glow-gold);
+}
+
+.rune-tree-card.primary {
+  border-color: rgba(200, 155, 60, 0.3);
+}
+
+.rune-tree-card.secondary {
+  border-color: rgba(10, 200, 185, 0.2);
+}
+
+.rune-tree-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.rune-tree-icon {
+  width: 32px;
+  height: 32px;
+  filter: brightness(1.2);
+}
+
+.rune-tree-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.rune-tree-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: auto;
+}
+
+.rune-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+}
+
+.rune-icon-wrapper {
+  position: relative;
+}
+
+.rune-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid var(--gold-dark);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.rune-icon.keystone {
+  width: 52px;
+  height: 52px;
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 12px rgba(200, 155, 60, 0.3);
+}
+
+.rune-icon:hover {
+  border-color: var(--gold-primary);
+  transform: scale(1.08);
+}
+
+.rune-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rune-name {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  flex: 1;
+}
+
+.rune-name.keystone-name {
+  font-size: 14px;
+  color: var(--gold-light);
+  font-weight: 600;
+}
+
+/* Stat Shards */
+.stat-shards {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.stat-shard {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(200, 155, 60, 0.15);
+  border: 1px solid var(--border-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--gold-primary);
+}
+
+/* Items Section */
+.items-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+.items-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.item-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.2s ease;
+}
+
+.item-slot:hover {
+  transform: translateY(-4px);
+}
+
+.item-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--gold-dark);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background: rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+.item-icon:hover {
+  border-color: var(--gold-primary);
+  box-shadow: var(--shadow-glow-gold);
+}
+
+.item-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.item-name {
+  font-size: 10px;
+  color: var(--text-secondary);
+  text-align: center;
+  max-width: 64px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-cost {
+  font-size: 9px;
+  color: var(--gold-primary);
+  font-weight: 600;
+}
+
+/* ============================================
+   Action Bar (Bottom)
+   ============================================ */
+.action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: rgba(1, 10, 19, 0.95);
+  border-top: 1px solid var(--border-gold);
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(12px);
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border: 1px solid var(--border-gold);
+  background: transparent;
+  color: var(--gold-light);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(200, 155, 60, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:hover {
+  background: rgba(200, 155, 60, 0.15);
+  border-color: var(--gold-primary);
+  box-shadow: var(--shadow-glow-gold);
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold-primary));
+  color: var(--bg-primary);
+  border-color: var(--gold-primary);
+  font-weight: 700;
+  padding: 12px 32px;
+  font-size: 14px;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--gold-primary), #D4A645);
+  box-shadow: 0 0 30px rgba(200, 155, 60, 0.4);
+}
+
+.btn-import {
+  border-color: var(--cyan-dark);
+  color: var(--cyan-light);
+}
+
+.btn-import:hover {
+  background: rgba(10, 200, 185, 0.15);
+  border-color: var(--cyan-primary);
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.btn-icon {
+  font-size: 16px;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ============================================
+   Notifications / Toasts
+   ============================================ */
+.toast-container {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-card);
+  animation: toast-in 0.3s ease forwards;
+  min-width: 280px;
+  max-width: 400px;
+}
+
+.toast.success {
+  border-color: var(--success);
+  border-left: 3px solid var(--success);
+}
+
+.toast.error {
+  border-color: var(--error);
+  border-left: 3px solid var(--error);
+}
+
+.toast.info {
+  border-color: var(--info);
+  border-left: 3px solid var(--info);
+}
+
+.toast-icon {
+  font-size: 18px;
+}
+
+.toast-message {
+  font-size: 13px;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toast-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}
+
+/* ============================================
+   Loading State
+   ============================================ */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(1, 10, 19, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+
+.loading-overlay.hidden {
+  display: none;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--border-subtle);
+  border-top-color: var(--gold-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   Empty State / Placeholder
+   ============================================ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  gap: 16px;
+  padding: 40px;
+  text-align: center;
+}
+
+.empty-state-icon {
+  font-size: 64px;
+  opacity: 0.5;
+}
+
+.empty-state-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.empty-state-hint {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   Dice Animation
+   ============================================ */
+@keyframes dice-roll {
+  0% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(90deg) scale(1.2); }
+  50% { transform: rotate(180deg) scale(1); }
+  75% { transform: rotate(270deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.rolling .btn-icon {
+  animation: dice-roll 0.5s ease-in-out;
+}
+
+/* ============================================
+   Champion splash transition
+   ============================================ */
+@keyframes fade-slide-in {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.champion-splash img.transitioning {
+  animation: fade-slide-in 0.5s ease forwards;
+}
+
+/* ============================================
+   Ultimate Bravery Mode indicator
+   ============================================ */
+.ub-indicator {
+  display: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(232, 64, 87, 0.9);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 5;
+  animation: ub-pulse 1.5s infinite;
+}
+
+.ub-active .ub-indicator {
+  display: block;
+}
+
+@keyframes ub-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ============================================
+   Tooltip
+   ============================================ */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 10px;
+  background: rgba(1, 10, 19, 0.95);
+  border: 1px solid var(--border-gold);
+  color: var(--text-primary);
+  font-size: 11px;
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+  z-index: 100;
+  pointer-events: none;
+  margin-bottom: 6px;
+  box-shadow: var(--shadow-card);
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 900px) {
+  .main-content {
+    grid-template-columns: 1fr;
+  }
+
+  .champion-panel {
+    grid-row: auto;
+    max-height: 280px;
+  }
+
+  .champion-splash {
+    height: 200px;
+  }
+
+  .runes-section {
+    grid-template-columns: 1fr;
+  }
+}
