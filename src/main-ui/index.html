@@ -10,16 +10,19 @@
 <body>
   <div id="app">
     <!-- Header / Title Bar -->
-    <header class="header">
-      <div class="header-left">
+    <header class="header electrobun-webkit-app-region-drag">
+      <div class="header-left electrobun-webkit-app-region-no-drag">
         <span class="app-logo">🎲</span>
         <span class="app-title">Build Randomizer</span>
       </div>
       <div class="header-right">
-        <span class="patch-badge" id="patchBadge">Loading...</span>
-        <div class="lcu-status">
+        <div class="lcu-status electrobun-webkit-app-region-no-drag">
           <span class="lcu-dot" id="lcuDot"></span>
           <span id="lcuStatusText">Disconnected</span>
+        </div>
+        <div class="window-controls electrobun-webkit-app-region-no-drag">
+          <button id="btnMinimize" class="window-btn minimize">_</button>
+          <button id="btnClose" class="window-btn close">X</button>
         </div>
       </div>
     </header>

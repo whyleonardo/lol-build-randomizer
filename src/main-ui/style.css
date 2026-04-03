@@ -67,13 +67,15 @@
 html, body {
   height: 100%;
   overflow: hidden;
-  background: var(--bg-primary);
+  background: transparent;
   color: var(--text-primary);
   font-family: 'Inter', 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* ============================================
@@ -100,6 +102,8 @@ html, body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  border-radius: 8px;
+  border: 1px solid rgba(200, 155, 60, 0.4);
   background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 30%, var(--bg-tertiary) 100%);
   position: relative;
   overflow: hidden;
@@ -210,6 +214,41 @@ html, body {
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.6; }
+}
+
+/* Window Controls */
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  -webkit-app-region: no-drag;
+}
+
+.window-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.window-btn:hover {
+  background: rgba(200, 155, 60, 0.15);
+  color: var(--text-primary);
+}
+
+.window-btn.close:hover {
+  background: var(--error);
+  color: #fff;
 }
 
 /* ============================================
@@ -722,8 +761,8 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 16px 20px;
+  gap: 16px;
+  padding: 12px 20px 16px 20px;
   background: rgba(1, 10, 19, 0.95);
   border-top: 1px solid var(--border-gold);
   position: relative;

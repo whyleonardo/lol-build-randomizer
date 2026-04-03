@@ -74,6 +74,14 @@ const mainRPC = BrowserView.defineRPC<AppRPCType>({
         const champions = await getChampions();
         return { version, championCount: champions.size };
       },
+      minimizeWindow: () => {
+        win.minimize();
+        return {};
+      },
+      closeWindow: () => {
+        win.close();
+        return {};
+      },
     },
     messages: {},
   },
@@ -92,7 +100,8 @@ const win = new BrowserWindow({
     x: 200,
     y: 100,
   },
-  titleBarStyle: "hiddenInset",
+  titleBarStyle: "hidden",
+  transparent: true,
   rpc: mainRPC,
 });
 

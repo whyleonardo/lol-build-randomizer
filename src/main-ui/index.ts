@@ -1,23 +1,26 @@
 import { Electroview } from "electrobun/view";
+import type { AppRPCType } from "../shared/types";
 
 // ============================================
 // Initialize Electrobun
 // ============================================
 
-const electrobun = new Electroview({
-  rpc: {
-    handlers: {
-      requests: {},
-      messages: {
-        showNotification: ({ type, message }) => {
-          showToast(type, message);
-        },
-        lcuStatusUpdate: (status) => {
-          updateLCUStatus(status.connected);
-        },
+const viewRPC = Electroview.defineRPC<AppRPCType>({
+  handlers: {
+    requests: {},
+    messages: {
+      showNotification: ({ type, message }) => {
+        showToast(type, message);
+      },
+      lcuStatusUpdate: (status) => {
+        updateLCUStatus(status.connected, status.gamePhase);
       },
     },
   },
+});
+
+const electrobun = new Electroview({
+  rpc: viewRPC,
 });
 
 // ============================================
@@ -52,23 +55,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadInitialData() {
   try {
-    const result = await electrobun.rpc.request.getDataVersion({});
+    const result = await viewRPC.request.getDataVersion({});
     dataVersion = result.version;
-    const patchBadge = $("#patchBadge");
-    if (patchBadge) {
-      patchBadge.textContent = `Patch ${dataVersion} • ${result.championCount} Champions`;
-    }
-  } catch (e) {
+  } catch (e: any) {
     console.error("Failed to load data:", e);
+    showToast("error", `Load Data Error: ${e.message || e}`);
   }
 }
 
 async function checkLCU() {
   try {
-    const status = await electrobun.rpc.request.checkLCUConnection({});
+    const status = await viewRPC.request.checkLCUConnection({});
     updateLCUStatus(status.connected, status.gamePhase);
-  } catch {
+    if (!status.connected) {
+       showToast("info", "LCU check returned connected: false");
+    }
+  } catch (e: any) {
     updateLCUStatus(false);
+    showToast("error", `LCU Error: ${e.message || e}`);
   }
 }
 
@@ -121,6 +125,21 @@ function setupEventListeners() {
   if (importItemsBtn) {
     importItemsBtn.addEventListener("click", handleImportItems);
   }
+
+  // Window Controls
+  const btnMinimize = $("#btnMinimize");
+  if (btnMinimize) {
+    btnMinimize.addEventListener("click", () => {
+      viewRPC.request.minimizeWindow({});
+    });
+  }
+
+  const btnClose = $("#btnClose");
+  if (btnClose) {
+    btnClose.addEventListener("click", () => {
+      viewRPC.request.closeWindow({});
+    });
+  }
 }
 
 // ============================================
@@ -135,7 +154,7 @@ async function handleRandomize() {
   btn.classList.add("rolling");
 
   try {
-    const build = await electrobun.rpc.request.generateBuild({
+    const build = await viewRPC.request.generateBuild({
       role: currentRole as any,
       ultimateBravery,
       lockedChampionId,
@@ -185,7 +204,7 @@ async function handleImportRunes() {
   if (!currentBuild) return;
 
   try {
-    const result = await electrobun.rpc.request.importRunes({
+    const result = await viewRPC.request.importRunes({
       runes: currentBuild.runes,
       championName: currentBuild.champion.name,
     });
@@ -203,7 +222,7 @@ async function handleImportItems() {
   if (!currentBuild) return;
 
   try {
-    const result = await electrobun.rpc.request.importItemSet({
+    const result = await viewRPC.request.importItemSet({
       build: currentBuild,
       lolPath: null,
     });
