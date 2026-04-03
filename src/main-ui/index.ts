@@ -126,6 +126,11 @@ function setupEventListeners() {
     importItemsBtn.addEventListener("click", handleImportItems);
   }
 
+  const autoLockBtn = $("#autoLockBtn");
+  if (autoLockBtn) {
+    autoLockBtn.addEventListener("click", handleAutoLock);
+  }
+
   // Window Controls
   const btnMinimize = $("#btnMinimize");
   if (btnMinimize) {
@@ -166,8 +171,10 @@ async function handleRandomize() {
     // Enable import buttons
     const importRunesBtn = $("#importRunesBtn") as HTMLButtonElement;
     const importItemsBtn = $("#importItemsBtn") as HTMLButtonElement;
+    const autoLockBtn = $("#autoLockBtn") as HTMLButtonElement;
     if (importRunesBtn) importRunesBtn.disabled = false;
     if (importItemsBtn) importItemsBtn.disabled = false;
+    if (autoLockBtn) autoLockBtn.disabled = false;
   } catch (e: any) {
     showToast("error", `Failed to generate build: ${e.message}`);
   } finally {
@@ -197,6 +204,22 @@ function handleLockChampion() {
       lockBtn.classList.add("locked");
     }
     showToast("info", `${currentBuild.champion.name} locked!`);
+  }
+}
+
+async function handleAutoLock() {
+  if (!currentBuild) return;
+
+  try {
+    const result = await viewRPC.request.autoLockChampion({
+      championKey: currentBuild.champion.key,
+      championName: currentBuild.champion.name,
+      runes: currentBuild.runes,
+    });
+
+    showToast(result.success ? "success" : "error", result.message);
+  } catch (e: any) {
+    showToast("error", `Failed to auto-lock: ${e.message}`);
   }
 }
 

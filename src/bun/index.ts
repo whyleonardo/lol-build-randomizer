@@ -59,6 +59,13 @@ const mainRPC = BrowserView.defineRPC<AppRPCType>({
         return await importRunes(runes, championName);
       },
 
+      autoLockChampion: async ({ championKey, championName, runes }) => {
+        console.log(`[RPC] autoLockChampion for ${championName}`);
+        // Requires importing autoLockAndRune from lcu-client
+        const { autoLockAndRune } = await import("./lcu-client");
+        return await autoLockAndRune(championKey, championName, runes);
+      },
+
       importItemSet: async ({ build, lolPath }) => {
         console.log(`[RPC] importItemSet for ${build.champion.name}`);
         return await writeItemSet(build, lolPath);

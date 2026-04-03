@@ -133,6 +133,14 @@ export type AppRPCType = {
         };
         response: { success: boolean; message: string };
       };
+      autoLockChampion: {
+        params: {
+          championKey: string;
+          championName: string;
+          runes: SelectedRunes;
+        };
+        response: { success: boolean; message: string };
+      };
       checkLCUConnection: {
         params: {};
         response: LCUStatus;
@@ -169,7 +177,7 @@ export type AppRPCType = {
 // ============================================
 
 export const STAT_SHARDS = {
-  row1: [5008, 5005, 5007], // Adaptive Force, Attack Speed, CDR
-  row2: [5008, 5002, 5003], // Adaptive Force, Armor, MR
-  row3: [5001, 5002, 5003], // Health, Armor, MR
+  row1: [5008, 5005, 5007], // Adaptive, Attack Speed, Ability Haste
+  row2: [5008, 5010, 5001], // Adaptive, Move Speed, Flat Health
+  row3: [5011, 5013, 5001], // Scaling Health, Tenacity/Slow Resist, Flat Health
 };
