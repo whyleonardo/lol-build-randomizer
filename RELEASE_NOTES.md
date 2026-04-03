@@ -1,11 +1,12 @@
-# 🎲 LoL Build Randomizer - Release v0.0.2
+# 🎲 LoL Build Randomizer - Release v0.0.3
 
-*Escreva aqui todas as novidades, bugs arrumados e novas features para essa versão antes de rodar o comando da Tag! O Github Actions vai puxar esse texto e colar direto na caixinha da Release final.*
+Bem-vindo à nova atualização v0.0.3! 🚀
+Estamos refinando o projeto para garantir a verdadeira experiência multi-plataforma com melhorias estruturais no executável nativo.
 
 ## ✨ Novidades
-- Adicionado novo botão minimizar e fechar.
-- Alterado o ícone padrão para um belíssimo dado Hextech (🎲).
+- **Suporte Oficial Nativíssimo:** Restaurado o suporte a metadados nativos de ícones na engine do Electrobun. Agora todos os compiladores e sistemas (Win, Mac, Linux) vão utilizar a injeção oficial do framework para criar as propriedades da janela. 
+- O projeto agora suporta `.iconset` e build de bandeja transparentemente!
 
 ## 🐛 Correções
-- Corrigido um bug interno de compilação da dependência rcedit.
-- Adicionado suporte automatizado e robusto na esteira de dev para Mac, Linux e Windows.
+- Corrigido o bug na leitura de `RELEASE_NOTES.md` na aba de release do repositório (Github Actions Runner estava pulando o checkout dos arquivos documentais).
+- Removido scripts `rcedit` secundários da esteira.

@@ -57,16 +57,6 @@ jobs:
         if: steps.build-env.outputs.env == 'canary'
         run: bun run build:canary
 
-      - name: Setup executable icon (Windows)
-        if: runner.os == 'Windows'
-        shell: powershell
-        run: |
-          Invoke-WebRequest -Uri "https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe" -OutFile "rcedit.exe"
-          $launcherPath = (Get-ChildItem -Path "build" -Recurse -Filter "launcher.exe" -File).FullName | Select-Object -First 1
-          if ($launcherPath -and (Test-Path "icon.ico")) {
-            .\rcedit.exe $launcherPath --set-icon "icon.ico"
-          }
-
       - name: Zip outputs
         shell: bash
         run: |
@@ -95,6 +85,9 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:

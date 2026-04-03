@@ -1,4 +1,6 @@
-export default {
+import type { ElectrobunConfig } from "electrobun";
+
+const config: ElectrobunConfig = {
   app: {
     name: "LoL Build Randomizer",
     identifier: "dev.lol.build.randomizer",
@@ -16,6 +18,15 @@ export default {
     copy: {
       "src/main-ui/index.html": "views/main-ui/index.html",
       "src/main-ui/style.css": "views/main-ui/style.css"
+    },
+    linux: {
+      icon: "icon.iconset/icon_256x256.png"
+    },
+    win: {
+      icon: "icon.ico"
     }
   },
 };
+
+
+export default config
