@@ -12,6 +12,8 @@
   },
   "scripts": {
     "start": "bun run build:dev && electrobun dev",
-    "build:dev": "bun install && electrobun build"
+    "build:dev": "bun install && electrobun build",
+    "build:canary": "electrobun build --env=canary",
+    "build:stable": "electrobun build --env=stable"
   }
 }
