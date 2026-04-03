@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/release/your-username/lol-build-randomizer?style=for-the-badge&color=gold" alt="Current Release">
+  <img src="https://img.shields.io/github/v/release/whyleonardo/lol-build-randomizer?style=for-the-badge&color=gold" alt="Current Release">
   <img src="https://img.shields.io/github/license/your-username/lol-build-randomizer?style=for-the-badge&color=blue" alt="License">
 </p>
 
