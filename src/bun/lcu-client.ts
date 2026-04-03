@@ -34,9 +34,9 @@ async function findLockfile(): Promise<LCUCredentials | null> {
         const parts = content.split(":");
         if (parts.length >= 5) {
           return {
-            port: parseInt(parts[2]),
-            token: parts[3],
-            protocol: parts[4],
+            port: parseInt(parts[2]!),
+            token: parts[3]!,
+            protocol: parts[4]!,
           };
         }
       }
@@ -56,12 +56,10 @@ async function findFromProcess(): Promise<LCUCredentials | null> {
   try {
     const proc = Bun.spawn(
       [
-        "wmic",
-        "process",
-        "where",
-        "name='LeagueClientUx.exe'",
-        "get",
-        "commandline",
+        "powershell",
+        "-NoProfile",
+        "-Command",
+        "(Get-CimInstance Win32_Process -Filter \"Name='LeagueClientUx.exe'\" | Select-Object -ExpandProperty CommandLine) -join ' '"
       ],
       {
         stdout: "pipe",
@@ -76,8 +74,8 @@ async function findFromProcess(): Promise<LCUCredentials | null> {
 
     if (portMatch && tokenMatch) {
       return {
-        port: parseInt(portMatch[1]),
-        token: tokenMatch[1],
+        port: parseInt(portMatch[1]!),
+        token: tokenMatch[1]!,
         protocol: "https",
       };
     }
