@@ -60,6 +60,20 @@ jobs:
         if: steps.build-env.outputs.env == 'canary'
         run: bun run build:canary
 
+      # Workaround: Electrobun has a hardcoded rcedit path bug (issue #235).
+      # Native win.icon config is kept in electrobun.config.ts for when the fix lands.
+      # Until then, we manually download rcedit and inject the icon into both executables.
+      - name: Embed icon into Windows executables
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe" -OutFile "rcedit.exe"
+          $exes = Get-ChildItem -Path "build" -Recurse -Include "launcher.exe","bun.exe" -File
+          foreach ($exe in $exes) {
+            Write-Host "Injecting icon into: $($exe.FullName)"
+            .\rcedit.exe $exe.FullName --set-icon "assets\icon.ico"
+          }
+
       - name: Zip outputs
         shell: bash
         run: |
