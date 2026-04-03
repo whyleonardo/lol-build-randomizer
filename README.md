@@ -35,7 +35,7 @@ curl -fsSL https://bun.sh/install | bash
 ### Installation & Development
 1. Clone this repository:
 ```bash
-git clone https://github.com/your-username/lol-build-randomizer.git
+git clone https://github.com/whyleonardo/lol-build-randomizer.git
 cd lol-build-randomizer
 ```
 
