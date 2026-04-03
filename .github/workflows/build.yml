@@ -18,9 +18,8 @@ jobs:
             platform: windows-x64
           - os: ubuntu-latest
             platform: linux-x64
-          # - os: macos-14
-          #   platform: macos-arm64
-
+          - os: macos-14
+            platform: macos-arm64
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -58,11 +57,27 @@ jobs:
         if: steps.build-env.outputs.env == 'canary'
         run: bun run build:canary
 
+      - name: Zip outputs
+        shell: bash
+        run: |
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            powershell -Command "Compress-Archive -Path 'build\*\*' -DestinationPath 'release-${{ matrix.platform }}.zip' -Force"
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            # Encontrar a pasta .app ou o output e usar ditto
+            TARGET=$(find build -type d -name "*.app" | head -n 1)
+            [ -z "$TARGET" ] && TARGET=$(find build -type d -name "LoLBuildRandomizer-*" | head -n 1)
+            ditto -c -k --sequesterRsrc --keepParent "$TARGET" "release-${{ matrix.platform }}.zip"
+          else
+            cd build
+            zip -r ../release-${{ matrix.platform }}.zip .
+            cd ..
+          fi
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-${{ matrix.platform }}
-          path: artifacts/*
+          path: release-${{ matrix.platform }}.zip
 
   release:
     needs: build
