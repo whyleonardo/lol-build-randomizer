@@ -13,17 +13,21 @@ interface LCUCredentials {
 let cachedCredentials: LCUCredentials | null = null;
 
 /**
- * Attempt to find the LCU lockfile on Windows.
- * The lockfile contains: processName:pid:port:token:protocol
+ * Attempt to find the LCU lockfile.
  */
 async function findLockfile(): Promise<LCUCredentials | null> {
-  // Common Windows paths for League of Legends
-  const possiblePaths = [
+  const isWin = process.platform === "win32";
+  
+  // Common paths for League of Legends
+  const possiblePaths = isWin ? [
     "C:/Riot Games/League of Legends/lockfile",
     "D:/Riot Games/League of Legends/lockfile",
     "C:/Program Files/Riot Games/League of Legends/lockfile",
     "C:/Program Files (x86)/Riot Games/League of Legends/lockfile",
     "D:/Games/Riot Games/League of Legends/lockfile",
+  ] : [
+    "/Applications/League of Legends.app/Contents/LoL/lockfile",
+    `${process.env.HOME}/Library/Application Support/Riot Games/League of Legends/lockfile`,
   ];
 
   for (const lockfilePath of possiblePaths) {
@@ -50,24 +54,29 @@ async function findLockfile(): Promise<LCUCredentials | null> {
 
 /**
  * Try to find LCU credentials from the running process command line args.
- * Works on Windows using WMIC.
  */
 async function findFromProcess(): Promise<LCUCredentials | null> {
-  try {
-    const proc = Bun.spawn(
-      [
-        "powershell",
-        "-NoProfile",
-        "-Command",
-        "(Get-CimInstance Win32_Process -Filter \"Name='LeagueClientUx.exe'\" | Select-Object -ExpandProperty CommandLine) -join ' '"
-      ],
-      {
-        stdout: "pipe",
-        stderr: "pipe",
-      }
-    );
+  const isWin = process.platform === "win32";
 
-    const output = await new Response(proc.stdout).text();
+  try {
+    let output = "";
+    
+    if (isWin) {
+      const proc = Bun.spawn(
+        [
+          "powershell",
+          "-NoProfile",
+          "-Command",
+          "(Get-CimInstance Win32_Process -Filter \"Name='LeagueClientUx.exe'\" | Select-Object -ExpandProperty CommandLine) -join ' '"
+        ],
+        { stdout: "pipe", stderr: "pipe" }
+      );
+      output = await new Response(proc.stdout).text();
+    } else {
+      // macOS/Unix path
+      const proc = Bun.spawn(["ps", "aux"], { stdout: "pipe" });
+      output = await new Response(proc.stdout).text();
+    }
 
     const portMatch = output.match(/--app-port=(\d+)/);
     const tokenMatch = output.match(/--remoting-auth-token=([\w-]+)/);
@@ -90,21 +99,18 @@ async function findFromProcess(): Promise<LCUCredentials | null> {
  * Get LCU credentials, trying lockfile first, then process args.
  */
 async function getCredentials(): Promise<LCUCredentials | null> {
-  // Try lockfile first (faster)
+  // If we have cached credentials, try them first or check if they are still valid?
+  // For now, let's just find them fresh to be sure
   let creds = await findLockfile();
+  if (!creds) {
+    creds = await findFromProcess();
+  }
+
   if (creds) {
     cachedCredentials = creds;
     return creds;
   }
 
-  // Try process args
-  creds = await findFromProcess();
-  if (creds) {
-    cachedCredentials = creds;
-    return creds;
-  }
-
-  cachedCredentials = null;
   return null;
 }
 
